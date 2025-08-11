@@ -4,8 +4,6 @@ public delegate object virtualFunction(params object[] args);
 
 internal class Logic(TypeMetadata metadata) : BaseLogic(metadata), IInstance
 {
-    internal Dictionary<string, virtualFunction> _vtable = [];
-
     public static string Work(Logic @this) => $"I am {nameof(Logic)}";
 
     internal static Type GetType(Logic @this) => @this._metaData._type;
@@ -13,7 +11,9 @@ internal class Logic(TypeMetadata metadata) : BaseLogic(metadata), IInstance
     public static new TypeMetadata LoadType() => new()
     {
         _type = typeof(Logic),
-        _vtable = BaseLogic.LoadType()._vtable.Register<Logic, string>(nameof(Work), Work) // Here override happens.
+
+        // Here override of vTable entry happens.
+        _vtable = BaseLogic.LoadType()._vtable.Register<Logic, string>(nameof(Work), Work)
     };
 }
 
@@ -27,6 +27,8 @@ internal class BaseLogic(TypeMetadata metaData) : ImplicitLayout(metaData), IIns
     public static TypeMetadata LoadType() => new()
     {
         _type = typeof(BaseLogic),
+
+        // Initial vTable initialization
         _vtable = new Dictionary<string, virtualFunction>()
             .Register<BaseLogic, string>(nameof(Work), Work)
             .Register<BaseLogic, string>(nameof(WorkReason), WorkReason)
