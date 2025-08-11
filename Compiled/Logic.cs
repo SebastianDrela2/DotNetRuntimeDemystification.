@@ -13,7 +13,7 @@ internal class Logic(TypeMetadata metadata) : BaseLogic(metadata), IInstance
     public static new TypeMetadata LoadType() => new()
     {
         _type = typeof(Logic),
-        _vtable = BaseLogic.LoadType()._vtable.Register<Logic, string>(nameof(Work), Work)
+        _vtable = BaseLogic.LoadType()._vtable.Register<Logic, string>(nameof(Work), Work) // Here override happens.
     };
 }
 
